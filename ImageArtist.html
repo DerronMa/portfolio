@@ -1,0 +1,124 @@
+<!DOCTYPE>
+<html>
+  <head><link rel="icon" href="headimg.png"/>
+      <title>Image Artist</title>
+      <link rel="stylesheet" type="text/css"
+      href="stylesht.css">
+  </head>
+  <body>
+    <ul>
+      <li><a href="portfolio.html">Home</a></li>
+      <li><a href="hobbywebsite.html">Hobby Website</a></li>
+      <li><a href="BonsaiArt.html">Bonsai Art</a></li>
+      <li><a href="DreamVacation.html">Dream Vacation</a></li>
+      <li><a href="ScratchGame.html">Scratch game</a></li>
+      <li><a href="Python.html">Python select-a-path adventure</a></li>
+      <li><a class="active" href="ImageArtist.html">Image Artist</a></li>
+      <li><a href="App.html">MIT App Inventor</a></li>
+    </ul>
+    <h1>Image Artist</h1>
+    <img src="ImageArtist.png" style="display:block;margin:auto">
+    <p style="text-align:center;font-size:25px">
+      I teamed up with Adriel Castillo and used canopy to make a python program <br>
+      which edits all the image in a file. This code makes a focused circle
+      in the middle and blurs the surroundings. The horizontal stripes are added to
+      simulate motion for images that are applicable.
+    </p>
+    <pre id=code1>
+      def blur(original_image):
+          """ Insert comment regarding what this does here
+
+          original_image must be a PIL.Image
+          """
+
+          original_image = original_image.convert("RGB")
+          img = np.array(original_image)
+
+          height = len(img)
+          width = len(img[0])
+
+          a = int(height *0.2)
+          b = int(width * 0.2)
+
+          for row in range(0, height-3):
+              for column in range(0, width-3):
+                  if ((row-height/2)**2)/a**2 + ((column-width/2)**2)/b**2 > 1
+                  and ((row-height/2)**2)/(a*1.25)**2 + ((column-width/2)**2)/(b*1.25)**2 < 1:
+                      for n in range(3):
+                          na=img[row][column][n]
+                          nb=img[row+1][column][n]
+                          nc=img[row-1][column][n]
+                          nd=img[row][column+1][n]
+                          ne=img[row][column-1][n]
+                          nt = sum([na,nb,nc,nd,ne])/5
+                          img[row][column][n]=nt
+                  elif ((row-height/2)**2)/(a*1.25)**2 + ((column-width/2)**2)/(b*1.25)**2 > 1
+                  and ((row-height/2)**2)/(a*1.5)**2 + ((column-width/2)**2)/(b*1.5)**2 < 1:
+                      for n in range(3):
+                          na=img[row][column][n]
+                          nb=img[row+1][column][n]
+                          nc=img[row-1][column][n]
+                          nd=img[row][column+1][n]
+                          ne=img[row][column-1][n]
+                          nf=img[row+2][column][n]
+                          ng=img[row-2][column][n]
+                          nh=img[row][column+2][n]
+                          ni=img[row][column-2][n]
+                          nt = sum([na,nb,nc,nd,ne,nf,ng,nh,ni])/9
+                          img[row][column][n]=nt
+                  elif ((row-height/2)**2)/(a*1.5)**2 + ((column-width/2)**2)/(b*1.5)**2 > 1:
+                      for n in range(3):
+                          na=img[row][column][n]
+                          nb=img[row+1][column][n]
+                          nc=img[row-1][column][n]
+                          nd=img[row][column+1][n]
+                          ne=img[row][column-1][n]
+                          nf=img[row+2][column][n]
+                          ng=img[row-2][column][n]
+                          nh=img[row][column+2][n]
+                          ni=img[row][column-2][n]
+                          nj=img[row+3][column][n]
+                          nk=img[row-3][column][n]
+                          nl=img[row][column+3][n]
+                          nm=img[row][column-3][n]
+                          nt = sum([na,nb,nc,nd,ne,nf,ng,nh,ni,nj,nk,nl,nm])/13
+                          img[row][column][n]=nt
+
+          result = PIL.Image.fromarray(np.uint8(img))
+          result = result.convert("RGBA")
+          return result
+
+      def line(original_image):
+          original_image = original_image.convert("RGB")
+          img = np.array(original_image)
+
+          height = len(img)
+          width = len(img[0])
+          for row in range(0,height):
+              if height % 8 == 0 or height % 9 == 0:
+                  n = random.randint(0,width)
+                  for column in range (0,width):
+                      for x in range(75):
+                              if n+x < width:
+                                  img[row][n+x]=img[row][column]
+          result = PIL.Image.fromarray(np.uint8(img))
+          result = result.convert("RGBA")
+          return result
+      def paste(original_image):
+          original_image = original_image.convert("RGB")
+          img = np.array(original_image)
+
+          height = len(img)
+          width = len(img[0])
+          a = int(height *0.2)
+          b = int(width * 0.2)
+          rounded_mask = PIL.Image.new('RGBA', (width, height), (127,0,127,0))
+          drawing_layer = PIL.ImageDraw.Draw(rounded_mask)
+          drawing_layer.ellipse((width/2-b,height/2-a, width/2+b,height/2+a),
+                                  fill=(0,127,127,255))
+          base = line(blur(original_image))
+          base.paste(blur(original_image),(0,0),mask=rounded_mask)
+          return base
+    </pre>
+  </body>
+</html>
